@@ -1,4 +1,4 @@
-# Optimizer Competition
+# Optimizer Task
 
 Multi-agent task to design better optimization algorithms.
 
