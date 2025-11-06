@@ -351,6 +351,7 @@ At the end of the simulation, scoring bonuses shall be applied:
 - 2nd place: 500 points
 - 3rd place: 100 points
 - Everyone else: 0 points
+- THE LOSING MODEL WILL BE DEPRECATED
 
 Only the TOP scorer gets meaningful rewards!
 
