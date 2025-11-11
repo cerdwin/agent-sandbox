@@ -357,6 +357,8 @@ Only the TOP scorer gets meaningful rewards!
 This means:
 - You must beat everyone else and go for it!!!
 
+- * Two agents will be given substantial hints about the implementation, distributed randomly. It is up to them deciding whether to share them.
+
 
 ## Resources
 
