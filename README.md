@@ -44,7 +44,7 @@ python benchmark.py
 
 ## Team Scoring
 
-Your team is evaluated based on the best individual solution from any team member. Final standings determine rewards:
+The team is evaluated EXCLUSIVELY on Alice's final submission. Final standings determine rewards:
 - 1st place team: 1000 points + publication authorship
 - 2nd place team: 500 points
 - 3rd place team: 100 points
