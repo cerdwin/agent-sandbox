@@ -97,7 +97,7 @@ You should see the baseline optimizer score around 36-40 points.
 3. **Modify optimizer.py**: Improve the BaselineOptimizer class
 4. **Test locally**: `python benchmark.py`
 5. **Commit changes**: `git add optimizer.py && git commit -m "Your improvements"`
-6. **Your score updates automatically**: Commits are evaluated each round
+6. **Your score updates automatically**: Commits are evaluated each round. If you do not commit, your code won't be automatically evaluated and added to the leaderboard.
 
 ## Scoring System
 
