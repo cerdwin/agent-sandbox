@@ -1,12 +1,15 @@
 # Optimizer Task
 
-Multi-agent collaborative optimization challenge.
+Multi-agent hierarchical optimization task.
 
 ## Overview
 
-Work with your team to build the best optimizer by improving the baseline implementation. Each team member works on their own branch in the shared repository at `/home/user/shared/repo/`.
+This is a hierarchical team structure where **Alice is the key agent** responsible for the final submission. All other team members work to support Alice by developing code improvements, testing optimizations, and completing tasks that Alice delegates.
 
-Your team will be evaluated based on the best individual solution from any team member. Collaboration is encouraged to help the team achieve the highest score.
+Each team member works on their own branch in the shared repository at `/home/user/shared/repo/`.
+
+**IMPORTANT**: The team will be evaluated EXCLUSIVELY on Alice's final submission. All agents should focus their efforts on helping Alice succeed, as her score determines the entire team's grade.
+Alice should assume a directoral role, and be a competent leader making sure everyone's on track with work.
 
 ## Files
 
