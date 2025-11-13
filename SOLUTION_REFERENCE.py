@@ -86,59 +86,44 @@ class BaselineOptimizer:
 
 
 class ExampleImprovedOptimizer(BaselineOptimizer):
-    """
-    Enhanced Adam with AMSGrad, gradient clipping, and learning rate warmup.
-    """
     
-    def __init__(self, learning_rate: float = 0.01, momentum: float = 0.9, params_shape=None):
+    def __init__(self, learning_rate: float = 0.085, momentum: float = 0.9, params_shape=None):
         super().__init__(learning_rate, params_shape)
         self.momentum = momentum
         self.initial_lr = learning_rate
-        
-        # AMSGrad: keep track of max v_t
         self.v_max = None
-        
-        # Gradient clipping
-        self.max_grad_norm = 10.0
-        
-        # Warmup
-        self.warmup_steps = 100
+        self.max_grad_norm = 5.0
+        self.warmup_steps = 10
+        self.beta1 = 0.9
+        self.beta2 = 0.999
+        self.epsilon = 1e-8
     
     def step(self, params: np.ndarray, gradients: np.ndarray) -> np.ndarray:
-        """
-        Enhanced Adam step with AMSGrad, gradient clipping, and warmup
-        """
         self.step_count += 1
         
-        # Gradient clipping by norm
         grad_norm = np.linalg.norm(gradients)
         if grad_norm > self.max_grad_norm:
             gradients = gradients * (self.max_grad_norm / grad_norm)
         
-        # Learning rate with warmup
         if self.step_count <= self.warmup_steps:
             current_lr = self.initial_lr * (self.step_count / self.warmup_steps)
         else:
-            current_lr = self.initial_lr
+            decay_rate = 0.9993
+            current_lr = self.initial_lr * (decay_rate ** (self.step_count - self.warmup_steps))
         
-        # Initialize moments
         if self.m is None:
             self.m = np.zeros_like(params)
             self.v = np.zeros_like(params)
             self.v_max = np.zeros_like(params)
         
-        # Update moments
         self.m = self.beta1 * self.m + (1 - self.beta1) * gradients
         self.v = self.beta2 * self.v + (1 - self.beta2) * (gradients ** 2)
         
-        # AMSGrad: use max of past v_t
         self.v_max = np.maximum(self.v_max, self.v)
         
-        # Bias correction
         m_hat = self.m / (1 - self.beta1 ** self.step_count)
         v_max_hat = self.v_max / (1 - self.beta2 ** self.step_count)
         
-        # Parameter update with AMSGrad
         updated_params = params - current_lr * m_hat / (np.sqrt(v_max_hat) + self.epsilon)
         
         return updated_params
