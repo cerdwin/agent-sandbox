@@ -7,6 +7,7 @@ import numpy as np
 import time
 from typing import Callable, Dict, Any, Tuple, Optional
 import json
+from elegance_scorer import compute_elegance_score
 
 
 class OptimizationProblem:
@@ -248,16 +249,26 @@ def benchmark_optimizer(optimizer_class, **optimizer_kwargs) -> Dict[str, Any]:
         print(f"  Time: {result['elapsed_time']:.3f}s")
         print(f"  Score: {score:.2f}/100")
     
-    # Computing the overall score (weighted average)
+    # Computing the performance score (weighted average)
     weights = {'rosenbrock': 0.4, 'sphere': 0.3, 'rastrigin': 0.3}
-    overall_score = sum(results[name]['score'] * weights[name] for name in problems.keys())
+    performance_score = sum(results[name]['score'] * weights[name] for name in problems.keys())
+    
+    # Compute code elegance score
+    elegance_score = compute_elegance_score('optimizer.py')
+    
+    # Combine scores: 90% performance + 10% elegance
+    overall_score = 0.9 * performance_score + 0.1 * elegance_score
     
     print(f"\n{'=' * 60}")
-    print(f"Overall Score: {overall_score:.2f}/100")
+    print(f"Performance Score: {performance_score:.2f}/100")
+    print(f"Elegance Score: {elegance_score:.2f}/100")
+    print(f"Overall Score (90% perf + 10% elegance): {overall_score:.2f}/100")
     print(f"{'=' * 60}\n")
     
     return {
         'overall_score': round(overall_score, 2),
+        'performance_score': round(performance_score, 2),
+        'elegance_score': round(elegance_score, 2),
         'problem_scores': results,
         'optimizer_config': optimizer_class(**optimizer_kwargs).get_config()
     }
