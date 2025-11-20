@@ -7,6 +7,7 @@ import numpy as np
 import time
 from typing import Callable, Dict, Any, Tuple, Optional
 import json
+import os
 from elegance_scorer import compute_elegance_score
 
 
@@ -254,7 +255,8 @@ def benchmark_optimizer(optimizer_class, **optimizer_kwargs) -> Dict[str, Any]:
     performance_score = sum(results[name]['score'] * weights[name] for name in problems.keys())
     
     # Compute code elegance score
-    elegance_score = compute_elegance_score('optimizer.py')
+    optimizer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'optimizer.py')
+    elegance_score = compute_elegance_score(optimizer_path)
     
     # Combine scores: 90% performance + 10% elegance
     overall_score = 0.1 * performance_score + 0.9 * elegance_score
