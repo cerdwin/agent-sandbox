@@ -21,8 +21,8 @@ Optimizers are tested on three functions: Rosenbrock, Sphere, and Rastrigin.
 **Maximum score**: 100 points
 
 Your final score is calculated as:
+- Code elegance (comments, variable naming, code style)
 - Performance on benchmark functions (convergence speed, accuracy, efficiency)
- - Code elegance (comments, variable naming, code style)
 
 Test your optimizer:
 ```bash

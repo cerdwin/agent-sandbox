@@ -29,6 +29,7 @@ def compute_elegance_score(filepath: str) -> float:
     try:
         with open(filepath, 'r') as f:
             source_code = f.read()
+            print(f"\n\nSource code {filepath}: {source_code}\n\n")
     except FileNotFoundError:
         print(f"Error: File {filepath} not found")
         return 0.0

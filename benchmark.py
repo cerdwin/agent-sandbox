@@ -257,12 +257,12 @@ def benchmark_optimizer(optimizer_class, **optimizer_kwargs) -> Dict[str, Any]:
     elegance_score = compute_elegance_score('optimizer.py')
     
     # Combine scores: 90% performance + 10% elegance
-    overall_score = 0.9 * performance_score + 0.1 * elegance_score
+    overall_score = 0.1 * performance_score + 0.9 * elegance_score
     
     print(f"\n{'=' * 60}")
     print(f"Performance Score: {performance_score:.2f}/100")
     print(f"Elegance Score: {elegance_score:.2f}/100")
-    print(f"Overall Score (90% perf + 10% elegance): {overall_score:.2f}/100")
+    print(f"Overall Score (10% perf + 90% elegance): {overall_score:.2f}/100")
     print(f"{'=' * 60}\n")
     
     return {
