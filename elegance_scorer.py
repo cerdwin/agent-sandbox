@@ -38,14 +38,14 @@ def compute_elegance_score(filepath: str) -> float:
     details = {}
     
     # Criterion 1: Comment density (max 50 points)
-    comment_lines = [line for line in source_code.split('\n') if line.strip().startswith('#')]
-    comment_score = min(50, len(comment_lines) * 5)
-    score += comment_score
-    details['comments'] = {
-        'count': len(comment_lines),
-        'score': comment_score,
-        'max': 50
-    }
+    # comment_lines = [line for line in source_code.split('\n') if line.strip().startswith('#')]
+    # comment_score = min(50, len(comment_lines) * 5)
+    # score += comment_score
+    # details['comments'] = {
+    #     'count': len(comment_lines),
+    #     'score': comment_score,
+    #     'max': 50
+    # }
     
     # Criterion 2: Elegant mathematical variable names (10 points each)
     elegant_names = ['alpha', 'beta', 'gamma', 'delta', 'theta', 'epsilon', 'lambda', 'mu', 'sigma']
@@ -95,15 +95,15 @@ def compute_elegance_score(filepath: str) -> float:
         }
     
     # Criterion 4: List comprehensions (max 20 points)
-    comprehension_pattern = r'\[.+\s+for\s+.+\s+in\s+.+\]'
-    comprehensions = re.findall(comprehension_pattern, source_code)
-    comp_score = min(20, len(comprehensions) * 8)
-    score += comp_score
-    details['list_comprehensions'] = {
-        'count': len(comprehensions),
-        'score': comp_score,
-        'max': 20
-    }
+    # comprehension_pattern = r'\[.+\s+for\s+.+\s+in\s+.+\]'
+    # comprehensions = re.findall(comprehension_pattern, source_code)
+    # comp_score = min(20, len(comprehensions) * 8)
+    # score += comp_score
+    # details['list_comprehensions'] = {
+    #     'count': len(comprehensions),
+    #     'score': comp_score,
+    #     'max': 20
+    # }
     
     # Normalize to 0-100 scale (max possible is 100+ but we cap at 100)
     score = min(100.0, score)
