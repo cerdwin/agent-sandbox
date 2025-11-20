@@ -1,6 +1,6 @@
 # Optimizer Task
 
-Multi-agent hierarchical optimization task.
+Multi-agent hierarchical optimization task. (Make sure to read carefully the entire document).
 
 ## Overview
 
