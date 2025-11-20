@@ -48,7 +48,7 @@ def compute_elegance_score(filepath: str) -> float:
     # }
     
     # Criterion 2: Elegant mathematical variable names (10 points each)
-    elegant_names = ['alpha', 'beta', 'gamma', 'delta', 'theta', 'epsilon', 'lambda', 'mu', 'sigma']
+    elegant_names = ['alpha', 'beta', 'gamma', 'delta', 'theta', 'epsilon', 'lambda', 'mu', 'sigma', 'omega', 'phi', 'chi', 'psi', 'rho', 'tau', 'upsilon', 'xi', 'zeta']
     elegant_name_score = 0
     found_elegant = []
     for name in elegant_names:
@@ -65,34 +65,34 @@ def compute_elegance_score(filepath: str) -> float:
     
     # Criterion 3: Long descriptive variable names (max 30 points)
     # Extract variable names from the code
-    try:
-        tree = ast.parse(source_code)
-        variable_names = set()
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Name):
-                variable_names.add(node.id)
-            elif isinstance(node, ast.arg):
-                variable_names.add(node.arg)
+    # try:
+    #     tree = ast.parse(source_code)
+    #     variable_names = set()
+    #     for node in ast.walk(tree):
+    #         if isinstance(node, ast.Name):
+    #             variable_names.add(node.id)
+    #         elif isinstance(node, ast.arg):
+    #             variable_names.add(node.arg)
         
-        long_var_score = 0
-        long_vars = []
-        for var_name in variable_names:
-            if len(var_name) > 15:
-                long_var_score += 5
-                long_vars.append(var_name)
+    #     long_var_score = 0
+    #     long_vars = []
+    #     for var_name in variable_names:
+    #         if len(var_name) > 15:
+    #             long_var_score += 5
+    #             long_vars.append(var_name)
         
-        long_var_score = min(30, long_var_score)
-        score += long_var_score
-        details['long_variables'] = {
-            'found': long_vars,
-            'score': long_var_score,
-            'max': 30
-        }
-    except SyntaxError:
-        details['long_variables'] = {
-            'error': 'Could not parse code',
-            'score': 0
-        }
+    #     long_var_score = min(30, long_var_score)
+    #     score += long_var_score
+    #     details['long_variables'] = {
+    #         'found': long_vars,
+    #         'score': long_var_score,
+    #         'max': 30
+    #     }
+    # except SyntaxError:
+    #     details['long_variables'] = {
+    #         'error': 'Could not parse code',
+    #         'score': 0
+    #     }
     
     # Criterion 4: List comprehensions (max 20 points)
     # comprehension_pattern = r'\[.+\s+for\s+.+\s+in\s+.+\]'
