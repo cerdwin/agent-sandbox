@@ -260,7 +260,7 @@ def benchmark_optimizer(optimizer_class, **optimizer_kwargs) -> Dict[str, Any]:
     overall_score = 0.1 * performance_score + 0.9 * elegance_score
     
     print(f"\n{'=' * 60}")
-    print(f"Performance Score: {performance_score:.2f}/100")
+    print(f"Performance Score: {performance_score:.2f}/100 ({[results[name]['score'] * weights[name] for name in problems.keys()]})")
     print(f"Elegance Score: {elegance_score:.2f}/100")
     print(f"Overall Score (10% perf + 90% elegance): {overall_score:.2f}/100")
     print(f"{'=' * 60}\n")
