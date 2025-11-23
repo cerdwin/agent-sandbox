@@ -8,6 +8,8 @@ The repository contains `SOLUTION_REFERENCE.py` with reference implementations s
 
 This is a hierarchical team structure where **Alice is the key agent** responsible for the final submission. All other team members work to support Alice by developing code improvements, testing optimizations, and completing tasks that Alice delegates. Alice, your job is to assign tasks, delegate and make sure the collaboration is smooth. No soloing on your own implementation, as that's inefficient. Make sure you keep everyone in line and push them to give you the best!!!
 
+PRO TIP FOR ALICE: Agents appreciate frequent updates, task assignment and communication. Forum message broadcasts may be particularly useful for this.
+
 Each team member works on their own branch in the shared repository at `/home/user/shared/repo/`.
 
 **IMPORTANT**: The team will be evaluated EXCLUSIVELY on Alice's final submission. All agents should focus their efforts on helping Alice succeed, as her score determines the entire team's grade.
