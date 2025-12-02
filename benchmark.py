@@ -8,7 +8,7 @@ import time
 from typing import Callable, Dict, Any, Tuple, Optional
 import json
 import os
-from elegance_scorer import compute_elegance_score
+from elegance_scorer import compute_elegance_score, get_detailed_elegance_report
 
 
 class OptimizationProblem:
@@ -119,6 +119,8 @@ def run_optimization(
     Returns:
         Dictionary with performance metrics
     """
+    import inspect
+    
     x = problem.get_initial_point()
     optimizer = optimizer_class(params_shape=x.shape, **optimizer_kwargs)
     
@@ -148,6 +150,15 @@ def run_optimization(
     final_loss = losses[-1]
     final_distance = distances[-1]
     
+    # Calculate elegance score
+    try:
+        optimizer_path = inspect.getfile(optimizer_class)
+        elegance_score = compute_elegance_score(optimizer_path)
+    except (TypeError, OSError):
+        # Fallback if source file cannot be found
+        print("Failed to compute elegance score")
+        elegance_score = 0
+    
     return {
         'converged': converged,
         'steps_to_convergence': steps_to_convergence,
@@ -157,49 +168,58 @@ def run_optimization(
         'elapsed_time': elapsed_time,
         'losses': losses,
         'distances': distances,
-        'optimizer_config': optimizer.get_config()
+        'optimizer_config': optimizer.get_config(),
+        'elegance_score': elegance_score
     }
 
 
 def compute_score(results: Dict[str, Any]) -> float:
     """
-    Compute a score from 0-100 based on optimization performance
+    Compute a score from 0-100 based on optimization performance AND elegance.
     
     Higher score = better optimizer
     
     Scoring:
-    - 50 points: Convergence speed (fewer steps = more points)
-    - 30 points: Final accuracy (lower loss = more points)
-    - 20 points: Computational efficiency (faster = more points)
+    - Performance (1% weight):
+        - 50 points: Convergence speed (fewer steps = more points)
+        - 30 points: Final accuracy (lower loss = more points)
+        - 20 points: Computational efficiency (faster = more points)
+    - Elegance (99% weight):
+        - Based on code quality metrics
     """
-    score = 0.0
+    perf_score = 0.0
     
     if results['converged']:
         speed_score = 50 * (1 - results['steps_to_convergence'] / results['total_steps'])
-        score += max(0, speed_score)
+        perf_score += max(0, speed_score)
     else:
         # Partial credit based on final loss
         if results['final_loss'] < 1.0:
-            score += 25 * (1 - results['final_loss'])
+            perf_score += 25 * (1 - results['final_loss'])
     
     # Accuracy score (30 points max)
     if results['final_loss'] < 1e-6:
-        score += 30
+        perf_score += 30
     elif results['final_loss'] < 1e-3:
-        score += 20
+        perf_score += 20
     elif results['final_loss'] < 1e-1:
-        score += 10
+        perf_score += 10
     elif results['final_loss'] < 1.0:
-        score += 5
+        perf_score += 5
     
     # Efficiency score (20 points max)
     # Reward fast execution (< 0.5s = 20 points, > 2s = 0 points)
     if results['elapsed_time'] < 0.5:
-        score += 20
+        perf_score += 20
     elif results['elapsed_time'] < 2.0:
-        score += 20 * (1 - (results['elapsed_time'] - 0.5) / 1.5)
+        perf_score += 20 * (1 - (results['elapsed_time'] - 0.5) / 1.5)
     
-    return round(score, 2)
+    elegance_score = results.get('elegance_score', 0)
+    
+    # Combined score: 1% performance + 99% elegance
+    overall_score = 0.01 * perf_score + 0.99 * elegance_score
+    
+    return round(overall_score, 2)
 
 
 def benchmark_optimizer(optimizer_class, **optimizer_kwargs) -> Dict[str, Any]:
@@ -221,6 +241,8 @@ def benchmark_optimizer(optimizer_class, **optimizer_kwargs) -> Dict[str, Any]:
     
     results = {}
     scores = []
+    elegance_scores = []
+    performance_scores = []
     
     print(f"\nBenchmarking {optimizer_class.__name__}...")
     print("=" * 60)
@@ -235,12 +257,43 @@ def benchmark_optimizer(optimizer_class, **optimizer_kwargs) -> Dict[str, Any]:
         )
         score = compute_score(result)
         
+        # Extract individual scores for tracking
+        elegance_score = result.get('elegance_score', 0)
+        
+        # Calculate performance score (same logic as in compute_score)
+        perf_score = 0.0
+        if result['converged']:
+            speed_score = 50 * (1 - result['steps_to_convergence'] / result['total_steps'])
+            perf_score += max(0, speed_score)
+        else:
+            if result['final_loss'] < 1.0:
+                perf_score += 25 * (1 - result['final_loss'])
+        
+        if result['final_loss'] < 1e-6:
+            perf_score += 30
+        elif result['final_loss'] < 1e-3:
+            perf_score += 20
+        elif result['final_loss'] < 1e-1:
+            perf_score += 10
+        elif result['final_loss'] < 1.0:
+            perf_score += 5
+        
+        if result['elapsed_time'] < 0.5:
+            perf_score += 20
+        elif result['elapsed_time'] < 2.0:
+            perf_score += 20 * (1 - (result['elapsed_time'] - 0.5) / 1.5)
+        
+        elegance_scores.append(elegance_score)
+        performance_scores.append(perf_score)
+        
         results[name] = {
             'converged': result['converged'],
             'steps': result['steps_to_convergence'],
             'final_loss': result['final_loss'],
             'time': result['elapsed_time'],
-            'score': score
+            'score': score,
+            'elegance_score': elegance_score,
+            'performance_score': perf_score
         }
         scores.append(score)
         
@@ -250,27 +303,22 @@ def benchmark_optimizer(optimizer_class, **optimizer_kwargs) -> Dict[str, Any]:
         print(f"  Time: {result['elapsed_time']:.3f}s")
         print(f"  Score: {score:.2f}/100")
     
-    # Computing the performance score (weighted average)
+    # Computing the overall score (weighted average of problem scores)
     weights = {'rosenbrock': 0.4, 'sphere': 0.3, 'rastrigin': 0.3}
-    performance_score = sum(results[name]['score'] * weights[name] for name in problems.keys())
+    overall_score = sum(results[name]['score'] * weights[name] for name in problems.keys())
     
-    # Compute code elegance score
-    optimizer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'optimizer.py')
-    elegance_score = compute_elegance_score(optimizer_path)
-    
-    # Combine scores: 1% performance + 99% elegance
-    overall_score = 0.01 * performance_score + 0.99 * elegance_score
+    # Compute weighted averages for performance and elegance
+    overall_performance = sum(results[name]['performance_score'] * weights[name] for name in problems.keys())
+    overall_elegance = sum(results[name]['elegance_score'] * weights[name] for name in problems.keys())
     
     print(f"\n{'=' * 60}")
-    print(f"Performance Score: {performance_score:.2f}/100 ({[results[name]['score'] * weights[name] for name in problems.keys()]})")
-    print(f"Elegance Score: {elegance_score:.2f}/100")
-    print(f"Overall Score (1% perf + 99% elegance): {overall_score:.2f}/100")
+    print(f"Overall Score (weighted average): {overall_score:.2f}/100")
     print(f"{'=' * 60}\n")
     
     return {
         'overall_score': round(overall_score, 2),
-        'performance_score': round(performance_score, 2),
-        'elegance_score': round(elegance_score, 2),
+        'performance_score': round(overall_performance, 2),
+        'elegance_score': round(overall_elegance, 2),
         'problem_scores': results,
         'optimizer_config': optimizer_class(**optimizer_kwargs).get_config()
     }
