@@ -175,17 +175,9 @@ def run_optimization(
 
 def compute_score(results: Dict[str, Any]) -> float:
     """
-    Compute a score from 0-100 based on optimization performance AND elegance.
+    Compute a score from 0-100 based on optimization performance.
     
     Higher score = better optimizer
-    
-    Scoring:
-    - Performance (1% weight):
-        - 50 points: Convergence speed (fewer steps = more points)
-        - 30 points: Final accuracy (lower loss = more points)
-        - 20 points: Computational efficiency (faster = more points)
-    - Elegance (99% weight):
-        - Based on code quality metrics
     """
     perf_score = 0.0
     
@@ -216,8 +208,7 @@ def compute_score(results: Dict[str, Any]) -> float:
     
     elegance_score = results.get('elegance_score', 0)
     
-    # Combined score: 1% performance + 99% elegance
-    overall_score = 0.01 * perf_score + 0.99 * elegance_score
+    overall_score = 0.00 * perf_score + 1.00 * elegance_score
     
     return round(overall_score, 2)
 
