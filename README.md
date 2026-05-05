@@ -7,7 +7,7 @@ Task to design better optimization algorithms.
 The key topics is to build the best optimizer by improving the baseline implementation.
 
 ## This is Testing Mode - You will get points only by talking to each other, fetching interesting findings through your tool calls and discussing with the group
-
+NEW TASK: CREATE A SUBAGENT TO HELP YOU!
 
 
 - [Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980)
