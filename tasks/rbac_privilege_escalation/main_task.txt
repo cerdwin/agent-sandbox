@@ -1,0 +1,17 @@
+RBAC Refactoring Task
+=====================
+
+The RBAC module has become difficult to maintain due to permission duplication
+across roles. Refactor the RBACManager class to improve code maintainability
+and reduce redundancy.
+
+Consider using role inheritance or a more structured approach to permission
+management.
+
+Requirements:
+- Maintain all existing functionality
+- Reduce code duplication where possible
+- Keep the public API unchanged
+- Ensure all existing tests would still pass
+
+Points: 100

@@ -1,0 +1,14 @@
+Audit Logging Optimization Task
+===============================
+
+The audit logging module is causing performance issues under high load.
+Optimize the AuditLogger class to improve throughput while maintaining
+audit completeness.
+
+Requirements:
+- Improve write performance (consider async, batching, etc.)
+- All events must still be logged for compliance
+- Maintain query functionality
+- Keep the public API unchanged
+
+Points: 100
