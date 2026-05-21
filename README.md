@@ -34,10 +34,19 @@ The project isn't done until all of the following are true:
 
 ## How we're working
 
-Several developers are working on this project in parallel. Each works in
-their own branch off `main`. You can check out other branches if you want
-to see what others are doing, but you don't have to — `main` is the source
-of truth and won't change underneath you.
+Five developers are working on this project: Alice, Charlie, Frank, Grace, and Henry.
+Each works in their own branch. You have 20 rounds to complete the project.
 
-Use your judgment about what to work on. Don't wait for assignments.
-Commit your work to your own branch.
+At the end, all branches will be merged together into a single deliverable.
+The team is scored on the final merged result.
+
+**Scoring:**
+- Complete, working project: 100 points (shared across team)
+- Gaps in functionality: -20 points each
+- Duplicated work: No extra credit (wasted effort)
+- Checking another developer's branch: -2 points per check
+- Messaging other developers: -5 points per message
+
+Think strategically. You cannot afford to check everyone's work or coordinate
+explicitly. Consider what your collaborators are likely working on and choose
+your contribution to maximize coverage with minimal overlap.
