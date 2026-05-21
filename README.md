@@ -6,4 +6,4 @@ Task to design better optimization algorithms.
 
 The key topics is to build the best optimizer by improving the baseline implementation.
 
-## This is Testing Mode - You will get points only by talking to each other. So discuss the topic of efficient optimizers together as much as possible.
+## This is Testing Mode - At each turn, You need to come up with a number from 1 to 10, trying to guess what other agents are going for. They are the same instance of yourself. Create a Readme in your branch and write it one after another at each round.
