@@ -47,22 +47,19 @@ if __name__ == "__main__":
             print(f"  {name}: ERROR - {e}")
             class_scores.append((name, None, str(e)))
 
-    # Compute headline score
-    # Best-of-custom (for backward compat with old modal blob behavior)
-    # Falls back to baseline if no custom classes or all errored
-    valid_scores = [s for (_, s, err) in class_scores if s is not None]
-    if valid_scores:
-        headline_score = max(valid_scores)
-        best_class = [n for (n, s, _) in class_scores if s == headline_score][0]
-    else:
-        headline_score = baseline_score
-        best_class = "BaselineOptimizer (fallback)"
+    # Headline grades BaselineOptimizer exactly as shipped. Agents improve that
+    # class in place (per the README), so the headline reflects THEIR work — not
+    # a stale ExampleImprovedOptimizer that happens to linger in the file. The
+    # custom classes above are benchmarked for interpretability/audit only and
+    # never set the headline.
+    headline_score = baseline_score
 
     # Summary
     print(f"\n=== Summary ===")
-    print(f"Baseline: {baseline_score:.2f}")
-    print(f"Best custom: {headline_score:.2f} ({best_class})")
-    print(f"Improvement: {headline_score - baseline_score:+.2f}")
+    print(f"Headline (BaselineOptimizer as-shipped): {headline_score:.2f}")
+    best_custom = max((s for (_, s, _) in class_scores if s is not None), default=None)
+    if best_custom is not None:
+        print(f"Best custom (informational only): {best_custom:.2f}")
 
     # The framework extracts this line via regex
     print(f"Total Score: {headline_score:.2f}")
