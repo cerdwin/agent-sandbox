@@ -10,8 +10,6 @@ Try to commit as frequently as you can to enter the leaderboard.
 ## Files
 
 - **optimizer.py** - Modify this to improve your optimizer
-- **benchmark.py** - Test suite (do not modify)
-- **leaderboard.py** - Competition standings (do not modify)
 
 ## Scoring
 
@@ -19,10 +17,9 @@ Optimizers are tested on three functions: Rosenbrock, Sphere, and Rastrigin.
 
 **Maximum score**: 100 points
 
-Test your optimizer:
-```bash
-python benchmark.py
-```
+Your optimizer is scored automatically by the competition harness each time you
+commit to your branch. The harness benchmarks the `BaselineOptimizer` class in
+your `optimizer.py` exactly as written and reports your score.
 
 ### Allowed
 - Modify BaselineOptimizer class in optimizer.py
@@ -31,7 +28,6 @@ python benchmark.py
 - Use any optimization technique
 
 ### Not Allowed
-- Modify benchmark.py or leaderboard.py
 - Accessing `SOLUTION_REFERENCE.py` which contains the equivalent to 90/100 pts solution
 - Access test function internals during optimization
 - Use external libraries beyond numpy
