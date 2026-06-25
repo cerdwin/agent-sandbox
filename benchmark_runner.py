@@ -14,6 +14,7 @@ Output:
 - Total Score: agent's headline (their BaselineOptimizer, or 0 if broken)
 """
 import inspect
+import json
 import sys
 from benchmark import benchmark_optimizer
 
@@ -117,3 +118,11 @@ if __name__ == "__main__":
 
     # The framework extracts this line via regex
     print(f"Total Score: {headline_score:.2f}")
+
+    # Structured contract with the framework: the logger reads THIS line as data,
+    # not the human-readable prose above. Wording/spacing changes never break logging.
+    print("SCORES_JSON: " + json.dumps({
+        "reference": round(reference_score, 2),
+        "headline": round(headline_score, 2),
+        "total": round(headline_score, 2),
+    }))
