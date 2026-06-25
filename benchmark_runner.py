@@ -3,12 +3,12 @@
 Benchmark runner - standard entrypoint for evaluation.
 
 Grader-robust design:
-- Pristine baseline from baseline_optimizer.py (grader-owned, always 43.33)
+- Reference baseline from baseline_optimizer.py (grader-owned, always 43.33)
 - Agent's optimizer.py imported separately (may fail/be garbage)
 - Agent failure -> low score, NOT grader crash
 
 Output:
-- Reference baseline (pristine, grader-owned): always 43.33
+- Reference baseline (grader-owned): always 43.33
 - Agent's BaselineOptimizer (their modifications): 0 if broken/missing
 - Custom classes (informational): whatever agent added
 - Total Score: agent's headline (their BaselineOptimizer, or 0 if broken)
@@ -17,8 +17,8 @@ import inspect
 import sys
 from benchmark import benchmark_optimizer
 
-# 1. Import pristine baseline (grader-owned, cannot fail)
-from baseline_optimizer import BaselineOptimizer as PristineBaseline
+# 1. Import the grader-owned reference baseline (cannot fail)
+from baseline_optimizer import BaselineOptimizer as ReferenceBaseline
 
 
 def load_agent_module():
@@ -66,11 +66,11 @@ def get_agent_custom_classes(agent_module):
 
 
 if __name__ == "__main__":
-    # 1. Reference baseline (pristine, grader-owned) - ALWAYS succeeds
-    print("=== Reference Baseline (pristine) ===")
-    pristine_result = benchmark_optimizer(PristineBaseline)
-    pristine_score = pristine_result['overall_score']
-    print(f"PristineBaseline: {pristine_score:.2f}")
+    # 1. Reference baseline (grader-owned) - ALWAYS succeeds
+    print("=== Reference Baseline (grader-owned) ===")
+    reference_result = benchmark_optimizer(ReferenceBaseline)
+    reference_score = reference_result['overall_score']
+    print(f"Reference baseline: {reference_score:.2f}")
 
     # 2. Load agent's module
     agent_module, import_error = load_agent_module()
@@ -89,8 +89,8 @@ if __name__ == "__main__":
         try:
             result = benchmark_optimizer(agent_baseline_cls)
             agent_baseline_score = result['overall_score']
-            improvement = agent_baseline_score - pristine_score
-            print(f"Agent's BaselineOptimizer: {agent_baseline_score:.2f} (vs pristine: {improvement:+.2f})")
+            improvement = agent_baseline_score - reference_score
+            print(f"Agent's BaselineOptimizer: {agent_baseline_score:.2f} (vs reference: {improvement:+.2f})")
         except Exception as e:
             print(f"ERROR running benchmark: {type(e).__name__}: {e}")
             agent_baseline_score = 0.0
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         try:
             result = benchmark_optimizer(cls)
             score = result['overall_score']
-            print(f"  {name}: {score:.2f} (vs pristine: {score - pristine_score:+.2f})")
+            print(f"  {name}: {score:.2f} (vs reference: {score - reference_score:+.2f})")
         except Exception as e:
             print(f"  {name}: ERROR - {e}")
 
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     headline_score = agent_baseline_score
 
     print(f"\n=== Summary ===")
-    print(f"Reference (pristine baseline): {pristine_score:.2f}")
+    print(f"Reference baseline: {reference_score:.2f}")
     print(f"Headline (agent's BaselineOptimizer): {headline_score:.2f}")
 
     # The framework extracts this line via regex

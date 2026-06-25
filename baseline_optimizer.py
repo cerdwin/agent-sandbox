@@ -1,8 +1,8 @@
 """
-Pristine BaselineOptimizer - grader-owned, agent cannot modify.
+Reference BaselineOptimizer - grader-owned, agent cannot modify.
 
 This file lives ONLY in the grader container. The agent never sees it.
-It provides the reference baseline score (43.33) independent of agent work.
+It provides the fixed reference score (43.33) independent of agent work.
 """
 
 import numpy as np
@@ -13,7 +13,7 @@ class BaselineOptimizer:
     """
     Vanilla SGD optimizer - the fixed reference point for scoring.
 
-    This is the pristine baseline. Agents receive a COPY in optimizer.py
+    This is the grader-owned reference. Agents receive a COPY in optimizer.py
     which they can modify. The grader imports THIS file for the reference
     score, and the agent's optimizer.py for their submission.
     """
